@@ -1,6 +1,31 @@
-# iCUE-Widget für CORSAIR XENEON EDGE
+# AION 2 Termin-Overlay für CORSAIR XENEON EDGE
 
-Dieser zusätzliche Projektteil bildet die Termin- und Alarmfunktionen des AION-2-Termin-Overlays als offizielles iCUE-HTML-Widget ab. Die Windows-WPF-Anwendung im Projektroot bleibt davon unabhängig.
+Ein interaktives iCUE-Widget für lokale AION-2-Event- und Boss-Erinnerungen auf dem CORSAIR XENEON EDGE. Alle Berechnungen und Einstellungen bleiben lokal; das Widget benötigt keine Anmeldung, keine Cloud und keinen Netzwerkzugriff.
+
+## Eigenschaften
+
+- neun hinterlegte Event- und Bosspläne für Europa/Berlin
+- drei unabhängig konfigurierbare Alarmstufen je Termin
+- frei wählbare Vorwarnzeit, Farbe, Blinken und Ton je Alarm
+- großer Countdown zum nächsten relevanten Termin
+- ausklappbare Vorschau der nächsten fünf aktivierten Termine
+- Touch-Einstellungen direkt auf dem XENEON EDGE
+- integrierter Alarmtest
+- lokale Speicherung je Widget-Instanz
+- responsive Darstellung für kleine und extragroße XENEON-EDGE-Widgetflächen
+- keine externen Dienste und keine Netzwerkberechtigung
+
+## Enthaltene Termine
+
+- Beritra-Luftangriff
+- Accursed Sword
+- Incursion of the Spirits
+- Raum-Zeit-Riss
+- Shugofesta
+- Abyss-Eroberung
+- Nahma-Zeitfenster
+- Belagerungsboss-Zeitfenster
+- Kaira-Zeitfenster
 
 ## Voraussetzungen
 
@@ -8,29 +33,18 @@ Dieser zusätzliche Projektteil bildet die Termin- und Alarmfunktionen des AION-
 - CORSAIR XENEON EDGE
 - Node.js nur zum Prüfen und Paketieren des Quellcodes
 
-## Enthaltene Funktionen
-
-- dieselben neun EU-Terminregeln wie die Windows-App
-- drei unabhängig konfigurierbare Alarmstufen je Termin
-- Vorwarnzeit, Farbe, Blinken und Ton je Alarm
-- Touch-Einstellungen direkt auf dem Display
-- Countdown und Vorschau der nächsten fünf aktivierten Termine
-- lokale Speicherung je Widget-Instanz über iCUE/Local Storage
-- keine Netzwerkzugriffe und keine Cloud-Anmeldung
-
 Die Töne werden im Widget erzeugt. iCUE fragt dafür bei der Installation nach der Lautsprecherberechtigung. Wegen der Browser-Sicherheitsregeln wird Audio erst nach der ersten Berührung des Widgets zuverlässig freigeschaltet.
 
 ## Entwickeln und prüfen
 
 ```powershell
-cd .\icue-widget
 npm install
 npm test
 npm run validate
 npm run package
 ```
 
-Das fertige Paket wird in `icue-widget\dist` erzeugt und bewusst nicht in Git eingecheckt.
+Das fertige Paket wird in `dist` erzeugt und bewusst nicht in Git eingecheckt.
 
 ## Installation
 
@@ -40,3 +54,11 @@ Das fertige Paket wird in `icue-widget\dist` erzeugt und bewusst nicht in Git ei
 4. Das Widget einmal berühren und anschließend Termine und Alarme einstellen.
 
 Die Ingame-Anzeige bleibt für Terminzeiten maßgeblich.
+
+## Datenschutz und Berechtigungen
+
+Das Manifest fordert ausschließlich die iCUE-Berechtigung `speaker` für die Alarmtöne an. Es werden keine Dateien außerhalb des Widgets gelesen und keine Daten übertragen.
+
+## Hinweis
+
+Dieses Community-Werkzeug ist kein offizielles Produkt von CORSAIR, NCSOFT oder den Betreibern von AION 2. Produkt- und Markennamen gehören ihren jeweiligen Rechteinhabern.

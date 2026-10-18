@@ -1,0 +1,4 @@
+node_modules/
+dist/
+*.icuewidget
+widget-preview-*.png
