@@ -23,7 +23,7 @@ let renderedViewKey = "";
 function mergeSettings(stored) {
   const defaults = defaultSettings();
   if (!stored || typeof stored !== "object") return defaults;
-  defaults.expanded = Boolean(stored.expanded);
+  defaults.showArtwork = stored.showArtwork !== false;
   defaults.selectedEventId = SCHEDULES.some(item => item.id === stored.selectedEventId) ? stored.selectedEventId : defaults.selectedEventId;
   defaults.utilityTimers = defaults.utilityTimers.map((fallback, index) => normalizeTimer(stored.utilityTimers?.[index], fallback));
   for (const schedule of SCHEDULES) {
@@ -137,9 +137,10 @@ function formatTarget(target) {
 }
 
 function nextRows(now) {
-  return nextMany(enabledSchedules(), now, 5).map(item => `
+  return nextMany(enabledSchedules(), now, 40).map(item => `
     <div class="next-row" data-target="${item.target.toISOString()}">
-      <div><div class="next-name">${item.schedule.name}</div><div class="next-time">${formatTarget(item.target)}</div></div>
+      ${settings.showArtwork ? `<img class="event-thumb" src="resources/event-${item.schedule.id}-v1.jpg" alt="">` : `<span class="event-marker" aria-hidden="true"></span>`}
+      <div class="next-copy"><div class="next-name">${item.schedule.name}</div><div class="next-time">${formatTarget(item.target)}</div></div>
       <div class="next-remaining">${formatRemaining(item.target - now)}</div>
     </div>`).join("");
 }
@@ -174,7 +175,7 @@ function timerCards(now) {
   return settings.utilityTimers.map((timer, index) => {
     const remaining = timerRemaining(timer, now.getTime());
     return `<article class="utility-timer ${timer.running ? "running" : ""} ${!timer.running && remaining === 0 ? "finished" : ""}" data-timer="${index}">
-      <div class="utility-head"><span>Timer ${index + 1}</span><button class="timer-set" data-action="set-timer" data-timer="${index}" aria-label="Startzeit für Timer ${index + 1} einstellen">Zeit</button></div>
+      <div class="utility-head"><span><img class="timer-icon" src="resources/timer.svg" alt="">Timer ${index + 1}</span><button class="timer-set" data-action="set-timer" data-timer="${index}" aria-label="Startzeit für Timer ${index + 1} einstellen"><img src="resources/clock-edit.svg" alt="">Zeit einstellen</button></div>
       <button class="timer-touch" data-action="toggle-timer" data-timer="${index}" aria-label="Timer ${index + 1} ${timer.running ? "stoppen" : "starten"}">
         <span class="utility-time">${formatTimer(remaining)}</span>
         <span class="utility-state">${timer.running ? "Tippen zum Stoppen" : remaining === 0 ? "Beendet · tippen zum Neustart" : "Tippen zum Starten"}</span>
@@ -199,7 +200,7 @@ function renderMain(now = new Date()) {
 
   const color = colorValues[focus.alarm.color] || colorValues.cyan;
   const isAlarm = Boolean(currentAlert);
-  const viewKey = `${focus.key}|${focus.target.toISOString()}|${settings.expanded}`;
+  const viewKey = `${focus.key}|${focus.target.toISOString()}|${settings.showArtwork}`;
   if (renderedViewKey === viewKey && app.querySelector(".shell")) {
     updateClocks(now);
     return;
@@ -211,23 +212,28 @@ function renderMain(now = new Date()) {
         <span class="eyebrow">${isAlarm ? (focus.test ? "Testalarm" : focus.schedule.category) : "AION 2 · Europa"}</span>
         <span class="status-pill">${isAlarm ? `ALARM ${focus.alarmIndex + 1 || ""}` : "● LIVE"}</span>
       </header>
-      <div class="content">
-        <section class="hero">
-          <h1>${focus.schedule.name}</h1>
-          <div class="countdown" data-target="${focus.target.toISOString()}">${formatRemaining(focus.target - now)}</div>
-          <div class="target">Termin: ${formatTarget(focus.target)}</div>
-          <div class="rule">${focus.schedule.rule}</div>
+      <div class="content ${settings.showArtwork ? "with-artwork" : "without-artwork"}">
+        <section class="left-column">
+          <section class="hero">
+            ${settings.showArtwork ? `<div class="hero-art" aria-hidden="true"></div>` : ""}
+            <div class="hero-copy">
+              <h1>${focus.schedule.name}</h1>
+              <div class="countdown" data-target="${focus.target.toISOString()}">${formatRemaining(focus.target - now)}</div>
+              <div class="target">Termin: ${formatTarget(focus.target)}</div>
+              <div class="rule">${focus.schedule.rule}</div>
+            </div>
+          </section>
+          <section class="utility-timers" aria-label="Eigene Timer">${timerCards(now)}</section>
         </section>
-        <section class="utility-timers" aria-label="Eigene Timer">${timerCards(now)}</section>
         <aside class="side">
-          <div class="actions">
-            <button class="button primary" data-action="settings">Einstellungen</button>
-            ${isAlarm ? `<button class="button danger icon" data-action="dismiss" title="Alarm schließen">×</button>` : ""}
+          <div class="side-head">
+            <div><span class="eyebrow">Termine</span><span class="list-count">${enabledSchedules().length} Pläne aktiv</span></div>
+            <div class="actions">
+              <button class="button settings-button" data-action="settings"><img src="resources/settings.svg" alt="">Einstellungen</button>
+              ${isAlarm ? `<button class="button danger icon" data-action="dismiss" title="Alarm schließen">×</button>` : ""}
+            </div>
           </div>
-          <div class="next-panel">
-            <div class="list-head" data-action="expand"><span>${settings.expanded ? "▴" : "▾"} Nächste 5 Termine</span><span>${enabledSchedules().length} aktiv</span></div>
-            ${settings.expanded ? `<div class="next-list">${nextRows(now)}</div>` : ""}
-          </div>
+          <div class="next-panel"><div class="next-list">${nextRows(now)}</div></div>
         </aside>
       </div>
       <footer class="footer-note">Lokale EU-Zeit · Ingame-Anzeige bleibt maßgeblich · Tippen aktiviert die Audioausgabe</footer>
@@ -254,6 +260,10 @@ function renderSettings() {
         ${SCHEDULES.map(item => `<button class="button ${item.id === selected.id ? "selected" : ""}" data-event="${item.id}">${item.name}</button>`).join("")}
       </nav>
       <div class="settings-scroll">
+        <section class="display-options">
+          <label class="switch"><input type="checkbox" data-show-artwork ${settings.showArtwork ? "checked" : ""}> AION-2-Grafiken anzeigen</label>
+          <span class="alarm-label">Blendet das große Hintergrundmotiv und die Bilder in der Terminliste ein oder aus.</span>
+        </section>
         <section class="event-card">
           <div class="setting-head"><div><div class="event-title">${selected.name}</div><div class="alarm-label">${selected.category} · ${selected.rule}</div></div><label class="switch"><input type="checkbox" data-event-enabled ${config.enabled ? "checked" : ""}> Termin aktiv</label></div>
           ${config.alarms.map((alarm, index) => `
@@ -276,7 +286,6 @@ function bindActions() {
     unlockAudio();
     const action = element.dataset.action;
     if (action === "settings") { screen = "settings"; renderSettings(); }
-    if (action === "expand") { settings.expanded = !settings.expanded; saveSettings(); renderMain(); }
     if (action === "dismiss" && currentAlert) { dismissed.add(currentAlert.key); currentTest = null; renderMain(); }
     if (action === "toggle-timer") {
       const index = Number(element.dataset.timer);
@@ -329,6 +338,7 @@ function bindSettings(eventId) {
     renderSettings();
   }));
   app.querySelector("[data-event-enabled]").addEventListener("change", event => { settings.events[eventId].enabled = event.target.checked; });
+  app.querySelector("[data-show-artwork]").addEventListener("change", event => { settings.showArtwork = event.target.checked; });
   app.querySelectorAll("[data-alarm]").forEach(row => {
     const alarm = settings.events[eventId].alarms[Number(row.dataset.alarm)];
     row.querySelectorAll("[data-field]").forEach(input => input.addEventListener("change", event => {

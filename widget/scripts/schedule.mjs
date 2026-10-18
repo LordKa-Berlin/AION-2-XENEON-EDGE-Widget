@@ -81,7 +81,7 @@ export function formatRemaining(milliseconds) {
 
 export function defaultSettings() {
   return {
-    expanded: false,
+    showArtwork: true,
     selectedEventId: SCHEDULES[0].id,
     utilityTimers: [
       { durationSeconds: 300, remainingSeconds: 300, running: false, endsAt: null },

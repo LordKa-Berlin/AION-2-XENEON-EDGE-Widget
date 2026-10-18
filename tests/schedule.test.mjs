@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { SCHEDULES, formatRemaining, nextMany, nextOccurrence, zonedParts } from "../widget/scripts/schedule.mjs";
+import { SCHEDULES, defaultSettings, formatRemaining, nextMany, nextOccurrence, zonedParts } from "../widget/scripts/schedule.mjs";
 import { formatTimer, normalizeTimer, setTimerDuration, timerRemaining, toggleTimer } from "../widget/scripts/timers.mjs";
 
 const byId = id => SCHEDULES.find(item => item.id === id);
@@ -50,4 +50,8 @@ test("Neue Timer-Startzeit stoppt und setzt den Countdown zurück", () => {
   const changed = setTimerDuration({ durationSeconds: 300, remainingSeconds: 100, running: true, endsAt: 50_000 }, 3723);
   assert.deepEqual(changed, { durationSeconds: 3723, remainingSeconds: 3723, running: false, endsAt: null });
   assert.equal(formatTimer(changed.remainingSeconds), "01:02:03");
+});
+
+test("AION-2-Grafiken sind standardmäßig eingeschaltet und konfigurierbar", () => {
+  assert.equal(defaultSettings().showArtwork, true);
 });

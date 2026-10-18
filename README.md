@@ -10,7 +10,8 @@ Ein interaktives iCUE-Widget für lokale AION-2-Event- und Boss-Erinnerungen auf
 - großer Countdown zum nächsten relevanten Termin
 - zwei frei einstellbare Touch-Timer unterhalb des Event-Countdowns
 - Start und Stopp durch Antippen des jeweiligen Timers; separate Zeitwahl je Timer
-- ausklappbare Vorschau der nächsten fünf aktivierten Termine
+- durchgehend sichtbare, scrollbare Terminliste in der rechten Spalte
+- AION-2-Hintergrundmotiv und Terminbilder, in den Einstellungen vollständig abschaltbar
 - Touch-Einstellungen direkt auf dem XENEON EDGE
 - integrierter Alarmtest
 - lokale Speicherung je Widget-Instanz
@@ -51,11 +52,15 @@ Das fertige Paket wird in `dist` erzeugt und bewusst nicht in Git eingecheckt.
 ## Installation
 
 1. In iCUE den Widget-Bereich des XENEON EDGE öffnen.
-2. Über **+** die erzeugte Datei `AION-2-Termin-Overlay-v1.0.0.icuewidget` auswählen.
+2. Über **+** die erzeugte Datei `AION-2-Termin-Overlay-v1.2.0.icuewidget` auswählen.
 3. Die Lautsprecherberechtigung freigeben, wenn Alarmtöne gewünscht sind.
 4. Das Widget einmal berühren und anschließend Termine und Alarme einstellen.
 
 Die Ingame-Anzeige bleibt für Terminzeiten maßgeblich.
+
+## Grafiken ein- oder ausschalten
+
+Unter **Einstellungen** lässt sich die Option **AION-2-Grafiken anzeigen** jederzeit deaktivieren. Danach verwendet das Widget weder das große AION-2-Motiv noch die Vorschaubilder in der Terminliste. Die Anordnung, Timer und Alarme bleiben unverändert; die Wahl wird lokal gespeichert.
 
 ## Datenschutz und Berechtigungen
 
