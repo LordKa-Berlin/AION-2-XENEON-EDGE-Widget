@@ -1,0 +1,14 @@
+{
+  "name": "aion-2-termin-overlay-icue-widget",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "validate": "icuewidget validate widget",
+    "package": "icuewidget package widget --output dist/AION-2-Termin-Overlay-v1.0.0.icuewidget"
+  },
+  "devDependencies": {
+    "icuewidget-cli": "latest"
+  }
+}

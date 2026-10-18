@@ -1,0 +1,26 @@
+{
+  "author": "LordKa",
+  "id": "de.walhalla-gaming.aion2-termin-overlay",
+  "name": "AION 2 Termin-Overlay",
+  "description": "Lokale EU-Event- und Boss-Timer für den CORSAIR XENEON EDGE.",
+  "version": "1.0.0",
+  "preview_icon": "resources/icon.svg",
+  "min_app_version": "5.52",
+  "min_framework_version": "1.9.0",
+  "os": [
+    {
+      "platform": "windows"
+    }
+  ],
+  "supported_devices": [
+    {
+      "type": "dashboard_lcd"
+    }
+  ],
+  "interactive": true,
+  "permissions": [
+    {
+      "type": "speaker"
+    }
+  ]
+}
