@@ -63,7 +63,7 @@ button, label, select, input[type="checkbox"] { touch-action: manipulation; }
 .content { min-height: 0; display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(300px, 1fr); gap: clamp(10px, 1.4vw, 18px); }
 .left-column { min-height: 0; display: grid; grid-template-rows: minmax(104px, 1.1fr) minmax(0, 1fr); gap: clamp(9px, 1.2vw, 15px); }
 .hero { position: relative; min-height: 0; overflow: hidden; border: 1px solid #2478a8; border-radius: 14px; background: linear-gradient(135deg, #0b1e35, #101b32); }
-.hero-art { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(3, 12, 24, .97) 0%, rgba(3, 12, 24, .83) 42%, rgba(3, 12, 24, .18) 100%), url('../resources/event-hero-aion2-v1.jpg') center / cover no-repeat; }
+.hero-art { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(3, 12, 24, .97) 0%, rgba(3, 12, 24, .83) 42%, rgba(3, 12, 24, .18) 100%), var(--hero-image) center / cover no-repeat; }
 .hero-copy { position: relative; z-index: 1; height: 100%; display: grid; align-content: center; justify-items: start; padding: clamp(10px, 1.5vw, 18px); }
 
 h1 {

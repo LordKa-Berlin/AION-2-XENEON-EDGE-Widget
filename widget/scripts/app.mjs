@@ -215,7 +215,7 @@ function renderMain(now = new Date()) {
       <div class="content ${settings.showArtwork ? "with-artwork" : "without-artwork"}">
         <section class="left-column">
           <section class="hero">
-            ${settings.showArtwork ? `<div class="hero-art" aria-hidden="true"></div>` : ""}
+            ${settings.showArtwork ? `<div class="hero-art" style="--hero-image:url('resources/event-${focus.schedule.id}-v1.jpg')" aria-hidden="true"></div>` : ""}
             <div class="hero-copy">
               <h1>${focus.schedule.name}</h1>
               <div class="countdown" data-target="${focus.target.toISOString()}">${formatRemaining(focus.target - now)}</div>

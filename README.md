@@ -12,6 +12,7 @@ Ein interaktives iCUE-Widget für lokale AION-2-Event- und Boss-Erinnerungen auf
 - Start und Stopp durch Antippen des jeweiligen Timers; separate Zeitwahl je Timer
 - durchgehend sichtbare, scrollbare Terminliste in der rechten Spalte
 - AION-2-Hintergrundmotiv und Terminbilder, in den Einstellungen vollständig abschaltbar
+- automatisch zum angezeigten Event wechselndes Hintergrundmotiv im großen Countdown
 - Touch-Einstellungen direkt auf dem XENEON EDGE
 - integrierter Alarmtest
 - lokale Speicherung je Widget-Instanz
