@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { SCHEDULES, formatRemaining, nextMany, nextOccurrence, zonedParts } from "../widget/scripts/schedule.mjs";
+import { formatTimer, normalizeTimer, setTimerDuration, timerRemaining, toggleTimer } from "../widget/scripts/timers.mjs";
 
 const byId = id => SCHEDULES.find(item => item.id === id);
 
@@ -34,4 +35,19 @@ test("Nächste fünf sind chronologisch und enthalten parallele Termine", () => 
 test("Restzeit wird kompakt formatiert", () => {
   assert.equal(formatRemaining(4 * 60_000 + 8_000), "00:04:08");
   assert.equal(formatRemaining(25 * 60 * 60_000), "1 T 01:00:00");
+});
+
+test("Touch-Timer startet, pausiert und setzt die Restzeit fort", () => {
+  const initial = normalizeTimer(null, { durationSeconds: 300, remainingSeconds: 300, running: false, endsAt: null });
+  const running = toggleTimer(initial, 1_000);
+  assert.equal(timerRemaining(running, 61_000), 240);
+  const paused = toggleTimer(running, 61_000);
+  assert.deepEqual(paused, { durationSeconds: 300, remainingSeconds: 240, running: false, endsAt: null });
+  assert.equal(timerRemaining(toggleTimer(paused, 80_000), 90_000), 230);
+});
+
+test("Neue Timer-Startzeit stoppt und setzt den Countdown zurück", () => {
+  const changed = setTimerDuration({ durationSeconds: 300, remainingSeconds: 100, running: true, endsAt: 50_000 }, 3723);
+  assert.deepEqual(changed, { durationSeconds: 3723, remainingSeconds: 3723, running: false, endsAt: null });
+  assert.equal(formatTimer(changed.remainingSeconds), "01:02:03");
 });

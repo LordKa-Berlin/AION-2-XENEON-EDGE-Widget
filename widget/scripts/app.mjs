@@ -1,4 +1,5 @@
 import { SCHEDULES, defaultSettings, formatRemaining, nextMany, nextOccurrence } from "./schedule.mjs";
+import { formatTimer, normalizeTimer, setTimerDuration, settleTimer, timerRemaining, toggleTimer } from "./timers.mjs";
 
 const app = document.getElementById("app");
 const storageKey = typeof uniqueId !== "undefined" ? uniqueId : "aion2-termin-overlay-icue-preview";
@@ -24,6 +25,7 @@ function mergeSettings(stored) {
   if (!stored || typeof stored !== "object") return defaults;
   defaults.expanded = Boolean(stored.expanded);
   defaults.selectedEventId = SCHEDULES.some(item => item.id === stored.selectedEventId) ? stored.selectedEventId : defaults.selectedEventId;
+  defaults.utilityTimers = defaults.utilityTimers.map((fallback, index) => normalizeTimer(stored.utilityTimers?.[index], fallback));
   for (const schedule of SCHEDULES) {
     const source = stored.events?.[schedule.id];
     if (!source) continue;
@@ -149,6 +151,36 @@ function updateClocks(now) {
     const value = row.querySelector(".next-remaining");
     if (value) value.textContent = formatRemaining(new Date(row.dataset.target) - now);
   });
+  let timerSettled = false;
+  settings.utilityTimers = settings.utilityTimers.map(timer => {
+    const settled = settleTimer(timer, now.getTime());
+    timerSettled ||= settled !== timer;
+    return settled;
+  });
+  if (timerSettled) saveSettings();
+  app.querySelectorAll(".utility-timer[data-timer]").forEach(card => {
+    const timer = settings.utilityTimers[Number(card.dataset.timer)];
+    const value = card.querySelector(".utility-time");
+    const state = card.querySelector(".utility-state");
+    const remaining = timerRemaining(timer, now.getTime());
+    if (value) value.textContent = formatTimer(remaining);
+    if (state) state.textContent = timer.running ? "Tippen zum Stoppen" : remaining === 0 ? "Beendet · tippen zum Neustart" : "Tippen zum Starten";
+    card.classList.toggle("running", timer.running);
+    card.classList.toggle("finished", !timer.running && remaining === 0);
+  });
+}
+
+function timerCards(now) {
+  return settings.utilityTimers.map((timer, index) => {
+    const remaining = timerRemaining(timer, now.getTime());
+    return `<article class="utility-timer ${timer.running ? "running" : ""} ${!timer.running && remaining === 0 ? "finished" : ""}" data-timer="${index}">
+      <div class="utility-head"><span>Timer ${index + 1}</span><button class="timer-set" data-action="set-timer" data-timer="${index}" aria-label="Startzeit für Timer ${index + 1} einstellen">Zeit</button></div>
+      <button class="timer-touch" data-action="toggle-timer" data-timer="${index}" aria-label="Timer ${index + 1} ${timer.running ? "stoppen" : "starten"}">
+        <span class="utility-time">${formatTimer(remaining)}</span>
+        <span class="utility-state">${timer.running ? "Tippen zum Stoppen" : remaining === 0 ? "Beendet · tippen zum Neustart" : "Tippen zum Starten"}</span>
+      </button>
+    </article>`;
+  }).join("");
 }
 
 function renderMain(now = new Date()) {
@@ -186,6 +218,7 @@ function renderMain(now = new Date()) {
           <div class="target">Termin: ${formatTarget(focus.target)}</div>
           <div class="rule">${focus.schedule.rule}</div>
         </section>
+        <section class="utility-timers" aria-label="Eigene Timer">${timerCards(now)}</section>
         <aside class="side">
           <div class="actions">
             <button class="button primary" data-action="settings">Einstellungen</button>
@@ -239,13 +272,55 @@ function renderSettings() {
 }
 
 function bindActions() {
-  app.querySelectorAll("[data-action]").forEach(element => element.addEventListener("click", () => {
+  app.querySelectorAll("[data-action]").forEach(element => element.addEventListener("click", event => {
     unlockAudio();
     const action = element.dataset.action;
     if (action === "settings") { screen = "settings"; renderSettings(); }
     if (action === "expand") { settings.expanded = !settings.expanded; saveSettings(); renderMain(); }
     if (action === "dismiss" && currentAlert) { dismissed.add(currentAlert.key); currentTest = null; renderMain(); }
+    if (action === "toggle-timer") {
+      const index = Number(element.dataset.timer);
+      settings.utilityTimers[index] = toggleTimer(settings.utilityTimers[index]);
+      saveSettings();
+      renderedViewKey = "";
+      renderMain();
+    }
+    if (action === "set-timer") {
+      event.stopPropagation();
+      openTimerEditor(Number(element.dataset.timer));
+    }
   }));
+}
+
+function openTimerEditor(index) {
+  const timer = settings.utilityTimers[index];
+  const hours = Math.floor(timer.durationSeconds / 3600);
+  const minutes = Math.floor((timer.durationSeconds % 3600) / 60);
+  const seconds = timer.durationSeconds % 60;
+  const modal = document.createElement("div");
+  modal.className = "timer-modal";
+  modal.innerHTML = `<section class="timer-dialog" role="dialog" aria-modal="true" aria-labelledby="timer-dialog-title">
+    <div class="eyebrow">Startzeit</div>
+    <h2 id="timer-dialog-title">Timer ${index + 1} einstellen</h2>
+    <div class="time-inputs">
+      <label><span>Std.</span><input type="number" min="0" max="99" value="${hours}" data-time="hours"></label>
+      <span class="time-separator">:</span>
+      <label><span>Min.</span><input type="number" min="0" max="59" value="${minutes}" data-time="minutes"></label>
+      <span class="time-separator">:</span>
+      <label><span>Sek.</span><input type="number" min="0" max="59" value="${seconds}" data-time="seconds"></label>
+    </div>
+    <div class="dialog-actions"><button class="button" data-dialog="cancel">Abbrechen</button><button class="button primary" data-dialog="apply">Übernehmen</button></div>
+  </section>`;
+  app.append(modal);
+  modal.querySelector("[data-dialog='cancel']").addEventListener("click", () => modal.remove());
+  modal.querySelector("[data-dialog='apply']").addEventListener("click", () => {
+    const value = name => Math.max(0, Number(modal.querySelector(`[data-time='${name}']`).value) || 0);
+    const total = value("hours") * 3600 + Math.min(59, value("minutes")) * 60 + Math.min(59, value("seconds"));
+    settings.utilityTimers[index] = setTimerDuration(settings.utilityTimers[index], total);
+    saveSettings();
+    renderedViewKey = "";
+    renderMain();
+  });
 }
 
 function bindSettings(eventId) {

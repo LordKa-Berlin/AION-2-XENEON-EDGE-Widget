@@ -83,6 +83,10 @@ export function defaultSettings() {
   return {
     expanded: false,
     selectedEventId: SCHEDULES[0].id,
+    utilityTimers: [
+      { durationSeconds: 300, remainingSeconds: 300, running: false, endsAt: null },
+      { durationSeconds: 600, remainingSeconds: 600, running: false, endsAt: null }
+    ],
     events: Object.fromEntries(SCHEDULES.map(schedule => [schedule.id, {
       enabled: true,
       alarms: [

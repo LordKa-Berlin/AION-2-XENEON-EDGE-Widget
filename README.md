@@ -8,6 +8,8 @@ Ein interaktives iCUE-Widget für lokale AION-2-Event- und Boss-Erinnerungen auf
 - drei unabhängig konfigurierbare Alarmstufen je Termin
 - frei wählbare Vorwarnzeit, Farbe, Blinken und Ton je Alarm
 - großer Countdown zum nächsten relevanten Termin
+- zwei frei einstellbare Touch-Timer unterhalb des Event-Countdowns
+- Start und Stopp durch Antippen des jeweiligen Timers; separate Zeitwahl je Timer
 - ausklappbare Vorschau der nächsten fünf aktivierten Termine
 - Touch-Einstellungen direkt auf dem XENEON EDGE
 - integrierter Alarmtest
