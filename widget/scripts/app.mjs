@@ -139,7 +139,7 @@ function formatTarget(target) {
 function nextRows(now) {
   return nextMany(enabledSchedules(), now, 40).map(item => `
     <div class="next-row" data-target="${item.target.toISOString()}">
-      ${settings.showArtwork ? `<img class="event-thumb" src="resources/event-${item.schedule.id}-v1.jpg" alt="">` : `<span class="event-marker" aria-hidden="true"></span>`}
+      ${settings.showArtwork ? `<img class="event-thumb" src="resources/event-${item.schedule.artwork ?? item.schedule.id}-v1.jpg" alt="">` : `<span class="event-marker" aria-hidden="true"></span>`}
       <div class="next-copy"><div class="next-name">${item.schedule.name}</div><div class="next-time">${formatTarget(item.target)}</div></div>
       <div class="next-remaining">${formatRemaining(item.target - now)}</div>
     </div>`).join("");
@@ -215,7 +215,7 @@ function renderMain(now = new Date()) {
       <div class="content ${settings.showArtwork ? "with-artwork" : "without-artwork"}">
         <section class="left-column">
           <section class="hero">
-            ${settings.showArtwork ? `<div class="hero-art" style="--hero-image:url('resources/event-${focus.schedule.id}-v1.jpg')" aria-hidden="true"></div>` : ""}
+            ${settings.showArtwork ? `<div class="hero-art" style="--hero-image:url('resources/event-${focus.schedule.artwork ?? focus.schedule.id}-v1.jpg')" aria-hidden="true"></div>` : ""}
             <div class="hero-copy">
               <h1>${focus.schedule.name}</h1>
               <div class="countdown" data-target="${focus.target.toISOString()}">${formatRemaining(focus.target - now)}</div>

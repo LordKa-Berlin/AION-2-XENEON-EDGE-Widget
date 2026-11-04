@@ -6,9 +6,10 @@ export const SCHEDULES = Object.freeze([
   { id: "spirit-incursion", category: "Dimensionsinvasion", name: "Incursion of the Spirits", rule: "Stündlich um :30", kind: "hourly", minute: 30 },
   { id: "rift", category: "PvP", name: "Raum-Zeit-Riss", rule: "Alle 3 Stunden", kind: "interval", hours: [2, 5, 8, 11, 14, 17, 20, 23] },
   { id: "shugofesta", category: "Event", name: "Shugofesta", rule: "Stündlich zur vollen Stunde", kind: "hourly", minute: 0 },
-  { id: "abyss", category: "PvP", name: "Abyss-Eroberung", rule: "Mo., Do. und Sa. um 21:00 Uhr", kind: "weekly", hour: 21, minute: 0, days: [1, 4, 6] },
+  { id: "abyss", category: "PvP", name: "Abyss-Eroberung", rule: "Do. und Sa. um 21:00 Uhr", kind: "weekly", hour: 21, minute: 0, days: [4, 6] },
   { id: "nahma", category: "Weltboss", name: "Nahma-Zeitfenster", rule: "Fr. und So. um 21:00 Uhr", kind: "weekly", hour: 21, minute: 0, days: [5, 0] },
-  { id: "siege", category: "Weltboss", name: "Belagerungsboss-Zeitfenster", rule: "Mo., Do. und Sa. um 21:30 Uhr", kind: "weekly", hour: 21, minute: 30, days: [1, 4, 6] },
+  { id: "siege", category: "Weltboss", name: "Artefaktboss-Zeitfenster", rule: "Do. und Sa. um 21:30 Uhr", kind: "weekly", hour: 21, minute: 30, days: [4, 6] },
+  { id: "agro", category: "Abyss-Feldboss", name: "Geisterfürst Agro", rule: "Täglich um 10:30 und 22:30 Uhr", kind: "interval", minute: 30, hours: [10, 22], artwork: "abyss" },
   { id: "kaira", category: "Weltboss", name: "Kaira-Zeitfenster", rule: "Täglich alle 3 Stunden ab 01:00 Uhr", kind: "interval", hours: [1, 4, 7, 10, 13, 16, 19, 22] }
 ]);
 

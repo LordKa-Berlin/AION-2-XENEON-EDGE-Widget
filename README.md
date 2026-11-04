@@ -4,7 +4,7 @@ Ein interaktives iCUE-Widget für lokale AION-2-Event- und Boss-Erinnerungen auf
 
 ## Eigenschaften
 
-- neun hinterlegte Event- und Bosspläne für Europa/Berlin
+- zehn hinterlegte Event- und Bosspläne für Europa/Berlin
 - drei unabhängig konfigurierbare Alarmstufen je Termin
 - frei wählbare Vorwarnzeit, Farbe, Blinken und Ton je Alarm
 - großer Countdown zum nächsten relevanten Termin
@@ -28,8 +28,11 @@ Ein interaktives iCUE-Widget für lokale AION-2-Event- und Boss-Erinnerungen auf
 - Shugofesta
 - Abyss-Eroberung
 - Nahma-Zeitfenster
-- Belagerungsboss-Zeitfenster
+- Artefaktboss-Zeitfenster
+- Geisterfürst Agro
 - Kaira-Zeitfenster
+
+Seit dem Patch vom 4. November 2026 laufen Abyss-Eroberung und Artefaktbosse nur noch donnerstags und samstags um 21:00 beziehungsweise 21:30 Uhr. Geisterfürst Agro erscheint täglich um 10:30 und 22:30 Uhr. Gartua und Legat Lagta sind nicht als feste Countdowns enthalten, weil ihr 11-Stunden-Respawn erst mit dem tatsächlichen Todeszeitpunkt beginnt.
 
 ## Voraussetzungen
 
@@ -53,7 +56,7 @@ Das fertige Paket wird in `dist` erzeugt und bewusst nicht in Git eingecheckt.
 ## Installation
 
 1. In iCUE den Widget-Bereich des XENEON EDGE öffnen.
-2. Über **+** die erzeugte Datei `AION-2-Termin-Overlay-v1.2.0.icuewidget` auswählen.
+2. Über **+** die erzeugte Datei `AION-2-Termin-Overlay-v1.3.0.icuewidget` auswählen.
 3. Die Lautsprecherberechtigung freigeben, wenn Alarmtöne gewünscht sind.
 4. Das Widget einmal berühren und anschließend Termine und Alarme einstellen.
 

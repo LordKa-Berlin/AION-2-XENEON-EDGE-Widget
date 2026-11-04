@@ -16,12 +16,26 @@ test("Raum-Zeit-Riss verwendet die acht dreistündlichen EU-Termine", () => {
   assert.equal(zonedParts(target).minute, 0);
 });
 
-test("Wochenplan findet den nächsten Belagerungsboss", () => {
+test("Wochenplan findet den nächsten Artefaktboss", () => {
   const target = nextOccurrence(byId("siege"), new Date("2026-10-18T10:31:12Z"));
   const parts = zonedParts(target);
-  assert.equal(parts.weekday, 1);
+  assert.equal(parts.weekday, 4);
   assert.equal(parts.hour, 21);
   assert.equal(parts.minute, 30);
+});
+
+test("Abyss-Eroberung findet nach dem Patch nur Donnerstag und Samstag", () => {
+  const monday = nextOccurrence(byId("abyss"), new Date("2026-11-02T10:00:00Z"));
+  assert.deepEqual(zonedParts(monday), { year: 2026, month: 11, day: 5, weekday: 4, hour: 21, minute: 0, second: 0 });
+});
+
+test("Geisterfürst Agro erscheint täglich um 10:30 und 22:30 Uhr", () => {
+  const morning = nextOccurrence(byId("agro"), new Date("2026-11-04T08:00:00Z"));
+  const evening = nextOccurrence(byId("agro"), new Date("2026-11-04T10:00:00Z"));
+  assert.equal(zonedParts(morning).hour, 10);
+  assert.equal(zonedParts(morning).minute, 30);
+  assert.equal(zonedParts(evening).hour, 22);
+  assert.equal(zonedParts(evening).minute, 30);
 });
 
 test("Nächste fünf sind chronologisch und enthalten parallele Termine", () => {
